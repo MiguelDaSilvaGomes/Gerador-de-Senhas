@@ -1,12 +1,11 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from "react-native";
-import Slider from "@react-native-community/slider";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal, TextInput } from "react-native";
 import { useState } from "react";
 import {ModalPassword} from '../../componentes/modal'
 
 let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 export function Home(){
-   const [size, setSize] = useState(10)
+   const [size, setSize] = useState("")
    const [passwordValue, setPasswordValue] = useState("")
    const [modalVisivel, setModalVisivel] = useState(false)
    function GeradorSenha(){
@@ -16,23 +15,25 @@ export function Home(){
        senha += charset.charAt(Math.floor(Math.random() * n))
     }
     console.log(senha)
-
+    if(size<=20 && size>5){
+      setModalVisivel(true)
+    }else{
+      setModalVisivel(false)
+    }
    setPasswordValue(senha)
-   setModalVisivel(true)
+   
    }
+   console.log(size)
   return(
   <View style={styles.container}>
     <Image source={require("../../assets/logo.png")} style={styles.logo} />
-    <Text style={{fontSize: 30, fontWeight: "bold"}}>{size} Caracteres</Text>
+    <Text style={{fontSize: 30, fontWeight: "bold"}}>Caracteres</Text>
     <View style={styles.area}>
-      <Slider style={{
-        height: 50}}
-        minimumValue={6}
-        maximumValue={20}
-        thumbTintColor="blue"
-        maximumTrackTintColor="red"
-        value={size}
-        onValueChange={(e)=>setSize(e.toFixed(0))}
+      <TextInput style={{paddingLeft:10}}
+        keyboardType='numeric'
+        value={size.toString()}
+        onChangeText={setSize}
+        placeholder="Quantidade de caracteres de 6 a 20"
       />
     </View>
 
@@ -61,8 +62,7 @@ const styles = StyleSheet.create({
 
   },
   area:{
-    marginTop: 14,
-    marginBottom: 14,
+    marginTop: 20,
     width: "80%",
     backgroundColor: "#FFF",
     borderRadius: 8,
@@ -73,8 +73,10 @@ const styles = StyleSheet.create({
     width: "80%",
     height: 50,
     alignItems: "center",
-    justifyContent: "center"
-  },
+    justifyContent: "center",
+    borderRadius: 8,
+    marginTop: 20
+    },
   buttonText:{
     color: "#FFF",
     fontSize: 20
